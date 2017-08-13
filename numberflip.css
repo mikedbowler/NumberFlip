@@ -1,0 +1,47 @@
+* {
+	text-align: center;
+}
+table {
+	border: 1px solid black;
+}
+td, .tile {
+	border: 1px solid black;
+	height: 50px;
+	width: 50px;
+}
+.tile {
+	background: url("number_flip_tile.png");
+}
+.center {
+	border: 5px solid blue;
+	width: 60%;
+	padding: 20px;
+	margin: auto;
+}
+.boardarea {
+	/*Border to visualize box dimensions, for debugging and design.*/
+	border: 5px solid green;
+	height: 398px;
+	width: 410px;
+	margin: auto;
+}
+.board {
+	/*Border to visualize box dimensions, for debugging and design.*/
+	border: 5px solid #DD2802;
+	width: 310px;
+	display: inline-block;
+}
+.side {
+	/*Border to visualize box dimensions, for debugging and design.*/
+	border: 5px solid #A347DD;
+	width: 70px;
+	float: right;
+	margin: 0px 0px 0px 10px;
+}
+.bottom {
+	/*Border to visualize box dimensions, for debugging and design.*/
+	border: 5px solid #53471D;
+	width: 310px;
+	margin: 10px 0px 0px 0px;
+	clear: left;
+}
