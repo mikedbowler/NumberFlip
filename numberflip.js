@@ -2,6 +2,10 @@
  var board = new2DArray(5,5);
  var rowHints = [5];
  var colHints = [5];
+ var numOf2s = 0;
+ var numOf3s = 0;
+ var score = 1;
+ var gameOver = false;
 
  initializeBoard();
  createHints();
@@ -64,8 +68,11 @@ function displayHints(){
 function showNumber(box){
 
 	//box.innerHTML = box.id.replace("box",""); //Prints the current box's id.
-	box.innerHTML = getBoardRC(box.id.replace("box",""));
+	var boxValue = getBoardRC(box.id.replace("box",""));
+	box.innerHTML = boxValue;
 	box.style.background = "#B88880";
+
+	onFlipUpdate(boxValue);
 }
 
 /**************************************************************
@@ -89,13 +96,26 @@ function new2DArray(r,c){
 //Initializes each tile on the board with either 0, 1, 2, or 3.
 function initializeBoard(){
 
+	var num = 0;
+
 	for(i=0;i<5;i++){
 		for(j=0;j<5;j++){
-			board[i][j] = getRandomInt(0,3);
+			
+			num = getRandomInt(0,3);
+
+			if(num == 3){
+				numOf3s++;
+			}
+			else if(num == 2){
+				numOf2s++;
+			}
+
+			board[i][j] = num;
 		}
 	}
 }
 
+//Create hints to be added to the board
 function createHints(){
 
 	var rowHint = new Hint(0,0);
@@ -126,6 +146,42 @@ function createHints(){
 		rowHint = new Hint(0,0);
 		colHint = new Hint(0,0);		
 	}//End outer for loop
+}
+
+//Decides the next action based on what number was flipped over
+function onFlipUpdate(num){
+
+	switch (num){
+
+		case 0:
+			score*=0;
+			gameOver = true;
+			alert("Game Over You Flipped Over A Zero!");
+			break;
+		case 1:
+			break;
+		case 2:
+			numOf2s--;
+			score*=2;
+			isWinner();
+			break;
+		case 3:
+			numOf3s--;
+			score*=3;
+			isWinner();
+			break;
+		default:
+			break;
+	}
+}
+
+//Determines if the player won the game
+function isWinner(){
+
+	if(numOf2s + numOf3s == 0){
+		gameOver = true;
+		alert("Congratulations You Won!\nScore = "+score);
+	}
 }
 
 /*Converts a number in the range [1,25] into the corresponding coordinates in
