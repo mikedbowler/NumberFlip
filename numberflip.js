@@ -4,8 +4,12 @@
  var colHints = [5];
  var numOf2s = 0;
  var numOf3s = 0;
+ var totalPoints = 0;
  var score = 1;
  var gameOver = false;
+ var isWin = false;
+ var tilesFlipped = 0;
+ var level = 1;
 
  initializeBoard();
  createHints();
@@ -16,6 +20,37 @@ displayBoard();
 displayHints();
 
 var tds = document.querySelectorAll("td");
+
+//Resets the game and changes the level up or down depending on the game's outcome
+function levelChange(){
+
+	if(isWin){
+		numOf2s = 0;
+		numOf3s = 0;
+		totalPoints += score;
+		score = 1;
+		level++;
+		gameOver = false;
+		isWin = false;
+		tilesFlipped = 0;
+	}
+	else{
+		numOf2s = 0;
+		numOf3s = 0;
+		score = 1;
+		gameOver = false;
+		level = (tilesFlipped < level) ? tilesFlipped : level;
+		tilesFlipped = 0;
+	}
+
+	initializeBoard();
+ 	createHints();
+
+	//Display the game board
+	displayBoard();
+	//Display the hints
+	displayHints();
+}
 
 //Displays the gmae board
 function displayBoard(){
@@ -67,12 +102,16 @@ function displayHints(){
 //Function for debugging purposes to ensure box ids are correct.
 function showNumber(box){
 
+	//If game is over this will prevent the player from flipping over more tiles.
+	if(!gameOver){
+
 	//box.innerHTML = box.id.replace("box",""); //Prints the current box's id.
 	var boxValue = getBoardRC(box.id.replace("box",""));
 	box.innerHTML = boxValue;
 	box.style.background = "#B88880";
 
 	onFlipUpdate(boxValue);
+	}
 }
 
 /**************************************************************
@@ -151,14 +190,16 @@ function createHints(){
 //Decides the next action based on what number was flipped over
 function onFlipUpdate(num){
 
+	tilesFlipped++;
+
 	switch (num){
 
 		case 0:
 			score*=0;
 			gameOver = true;
 			alert("Game Over You Flipped Over A Zero!");
-			break;
-		case 1:
+			levelChange();
+			alert("Start level "+level+"?");
 			break;
 		case 2:
 			numOf2s--;
@@ -180,7 +221,10 @@ function isWinner(){
 
 	if(numOf2s + numOf3s == 0){
 		gameOver = true;
-		alert("Congratulations You Won!\nScore = "+score);
+		isWin = true;
+		alert("Congratulations You Won!\nScore = "+(score+totalPoints));
+		levelChange();
+		alert("Start level "+level+"?");
 	}
 }
 
@@ -207,6 +251,6 @@ function Hint(ptotal,ztotal){
 	this.ztotal = ztotal; //Total number of zeros per row/column
 
 	this.getHint = function() { 
-		return this.ptotal+"/Z"+this.ztotal;
+		return this.ptotal+"/z"+this.ztotal;
 	}
 }
